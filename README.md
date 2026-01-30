@@ -50,3 +50,16 @@ python train.py
 
 # 4. Start the API Server
 uvicorn api:app --reload
+
+
+2. Frontend Setup (The Visuals)
+
+The frontend connects to the backend to visualize predictions.
+# 1. Open a new terminal and navigate to the frontend folder
+cd frontend
+
+# 2. Install Node dependencies
+npm install
+
+# 3. Start the React Application
+npm start
