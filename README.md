@@ -49,7 +49,7 @@ python train.py
 # This script will save model artifacts (.joblib files) and metrics.json to backend/models/
 
 # 4. Start the API Server
-uvicorn api:app --reload
+python -m uvicorn api:app --reload
 
 
 2. Frontend Setup (The Visuals)
