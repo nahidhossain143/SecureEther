@@ -151,26 +151,25 @@ const Dashboard = () => {
                 <h3>Project Details</h3>
                 <div className="details-grid">
                     <div className="detail-col">
-                        <h4>Submitted By [cite: 3]</h4>
+                        <h4>Submitted By</h4>
                         <ul>
-                            <li><strong>Nafiz Tonmoy</strong> (20220104136) [cite: 5, 7]</li>
-                            <li><strong>Jamil Jim</strong> (20220104139) [cite: 9, 13]</li>
-                            <li><strong>Md Nahid Hossain</strong> (20220104146) [cite: 14]</li>
+                            <li><strong>Nafiz Tonmoy</strong> (20220104136)</li>
+                            <li><strong>Jamil Jim</strong> (20220104139)</li>
+                            <li><strong>Md Nahid Hossain</strong> (20220104146)</li>
                         </ul>
-                        <div className="sub-text">Lab Group: C2 [cite: 15]</div>
+                        <div className="sub-text">Lab Group: C2</div>
                     </div>
                     <div className="detail-col">
-                        <h4>Submitted To [cite: 16]</h4>
+                        <h4>Submitted To</h4>
                         <ul>
-                            <li><strong>Mr. Mustofa Ahmed</strong><br/><span>Lecturer, Dept of CSE</span> [cite: 17]</li>
-                            <li><strong>Mr. Al Hasib Mahamud</strong><br/><span>Lecturer, Dept of CSE</span> [cite: 18]</li>
+                            <li><strong>Mr. Mustofa Ahmed</strong><br/><span>Lecturer, Dept of CSE</span></li>
+                            <li><strong>Mr. Al Hasib Mahamud</strong><br/><span>Lecturer, Dept of CSE</span></li>
                         </ul>
                     </div>
                     <div className="detail-col right-align">
-                         <h4>AUST [cite: 19]</h4>
                          <div className="sub-text">
-                            Department of Computer Science and Engineering [cite: 24]<br/>
-                            Ahsanullah University of Science and Technology [cite: 20]
+                            Department of Computer Science and Engineering<br/>
+                            Ahsanullah University of Science and Technology
                          </div>
                     </div>
                 </div>
