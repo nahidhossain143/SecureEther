@@ -1,34 +1,75 @@
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@300;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Share+Tech+Mono&display=swap');
 
-body {
-  margin: 0;
-  font-family: 'Rajdhani', sans-serif;
-  background-color: #050505; /* Deep Void Black */
-  color: #e0e0e0;
-  overflow: hidden; /* Prevent scrolling for full immersion */
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-h1, h2, h3, button {
-  font-family: 'Orbitron', sans-serif;
-  letter-spacing: 2px;
-}
-
-input {
-  font-family: 'Rajdhani', sans-serif;
-  font-weight: 500;
+@layer base {
+  html, body, #root {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background: #030303;
+    color: #e0e0e0;
+    font-family: 'Share Tech Mono', monospace;
+    overflow: hidden;
+  }
 }
 
-/* Scrollbar styling for the sidebar */
-::-webkit-scrollbar {
-  width: 8px;
-}
-::-webkit-scrollbar-track {
-  background: #111; 
-}
-::-webkit-scrollbar-thumb {
-  background: #333; 
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #00ff88; 
+@layer utilities {
+  .font-orbitron { font-family: 'Orbitron', sans-serif; }
+  .font-mono-sec { font-family: 'Share Tech Mono', monospace; }
+
+  /* Glow utilities */
+  .glow-green  { text-shadow: 0 0 12px rgba(0,255,136,0.7); }
+  .glow-red    { text-shadow: 0 0 12px rgba(255,0,85,0.7); }
+  .glow-blue   { text-shadow: 0 0 12px rgba(0,200,255,0.7); }
+
+  .border-glow-green { box-shadow: 0 0 8px rgba(0,255,136,0.25), inset 0 0 8px rgba(0,255,136,0.05); }
+  .border-glow-red   { box-shadow: 0 0 8px rgba(255,0,85,0.25),  inset 0 0 8px rgba(255,0,85,0.05); }
+
+  /* Scanline overlay effect */
+  .scanlines::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.08) 2px,
+      rgba(0,0,0,0.08) 4px
+    );
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* Subtle grid background */
+  .bg-grid {
+    background-image:
+      linear-gradient(rgba(0,255,136,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,255,136,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  /* Pulse animation for fraud state */
+  @keyframes pulse-red {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.5; }
+  }
+  .animate-pulse-red { animation: pulse-red 0.8s ease-in-out infinite; }
+
+  @keyframes fadeSlideUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .animate-fade-up { animation: fadeSlideUp 0.4s ease forwards; }
+
+  @keyframes scanline-sweep {
+    0%   { transform: translateY(-100%); }
+    100% { transform: translateY(100vh); }
+  }
+  .animate-sweep {
+    animation: scanline-sweep 3s linear infinite;
+  }
 }

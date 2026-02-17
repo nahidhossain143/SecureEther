@@ -1,0 +1,82 @@
+[
+    {
+        "feature": "Unnamed: 0",
+        "mean_abs_shap": 7.554405973407293
+    },
+    {
+        "feature": " Total ERC20 tnxs",
+        "mean_abs_shap": 0.9608117846422366
+    },
+    {
+        "feature": "Time Diff between first and last (Mins)",
+        "mean_abs_shap": 0.38876302628047216
+    },
+    {
+        "feature": " ERC20 uniq rec addr",
+        "mean_abs_shap": 0.1939991595405902
+    },
+    {
+        "feature": "total ether received",
+        "mean_abs_shap": 0.11850297658459936
+    },
+    {
+        "feature": "total transactions (including tnx to create contract",
+        "mean_abs_shap": 0.10302040958182421
+    },
+    {
+        "feature": "Avg min between received tnx",
+        "mean_abs_shap": 0.09469789610278337
+    },
+    {
+        "feature": "min val sent",
+        "mean_abs_shap": 0.09435150237564624
+    },
+    {
+        "feature": "Unique Received From Addresses",
+        "mean_abs_shap": 0.08455613796683141
+    },
+    {
+        "feature": "avg val received",
+        "mean_abs_shap": 0.07454254994173361
+    },
+    {
+        "feature": " ERC20 min val rec",
+        "mean_abs_shap": 0.044254033701104284
+    },
+    {
+        "feature": " ERC20 uniq sent token name",
+        "mean_abs_shap": 0.028534413333568362
+    },
+    {
+        "feature": "total ether balance",
+        "mean_abs_shap": 0.023184769759464888
+    },
+    {
+        "feature": "min value received",
+        "mean_abs_shap": 0.01987494737130124
+    },
+    {
+        "feature": "Received Tnx",
+        "mean_abs_shap": 0.016735762167767388
+    },
+    {
+        "feature": " ERC20 uniq sent addr",
+        "mean_abs_shap": 0.01669923354051659
+    },
+    {
+        "feature": " ERC20 uniq rec contract addr",
+        "mean_abs_shap": 0.015205012521898013
+    },
+    {
+        "feature": "Avg min between sent tnx",
+        "mean_abs_shap": 0.013589291516293298
+    },
+    {
+        "feature": "Sent tnx",
+        "mean_abs_shap": 0.010120201090343754
+    },
+    {
+        "feature": " ERC20 max val rec",
+        "mean_abs_shap": 0.00970595598796645
+    }
+]
