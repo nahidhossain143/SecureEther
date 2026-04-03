@@ -106,10 +106,10 @@ const ScannerTab = () => {
   const threshold = result?.threshold_used;
 
   return (
-    <div className="flex flex-1 overflow-hidden min-h-0">
+    <div className="flex flex-col lg:flex-row flex-1 overflow-hidden min-h-0">
 
       {/* SIDEBAR */}
-      <div className="w-80 min-w-[320px] flex flex-col bg-panel border-r border-border overflow-y-auto flex-shrink-0">
+      <div className="w-full lg:w-80 lg:min-w-[320px] max-h-[50vh] lg:max-h-full flex flex-col bg-panel border-b lg:border-b-0 lg:border-r border-border overflow-y-auto flex-shrink-0 z-10 shadow-xl">
 
         {/* Header */}
         <div className="px-6 pt-6 pb-4 border-b border-border">
@@ -236,7 +236,7 @@ const ScannerTab = () => {
       </div>
 
       {/* 3D VISUALIZER */}
-      <div className="flex-1 min-w-0 relative bg-gradient-to-br from-[#050f05] to-black scanlines overflow-hidden">
+      <div className="flex-1 min-w-0 min-h-[50vh] lg:min-h-0 relative bg-gradient-to-br from-[#050f05] to-black scanlines overflow-hidden">
 
         {/* Fraud border pulse */}
         {isFraud && (
@@ -262,12 +262,12 @@ const ScannerTab = () => {
 
         {/* TOP-RIGHT: Corner label */}
         <div className="absolute top-4 right-4 z-10 pointer-events-none text-right">
-          <div className="font-orbitron text-dim text-xs tracking-widest">BLOCKCHAIN NETWORK</div>
-          <div className="font-mono-sec text-muted text-xs mt-0.5">ETH MAINNET · LIVE</div>
+          <div className="font-orbitron text-dim text-xs tracking-widest hidden sm:block">BLOCKCHAIN NETWORK</div>
+          <div className="font-mono-sec text-muted text-xs mt-0.5">ETH MAINNET</div>
         </div>
 
         {/* BOTTOM-LEFT: Network stats */}
-        <div className="absolute bottom-4 left-4 z-10 pointer-events-none flex flex-col gap-1">
+        <div className="absolute bottom-4 left-4 z-10 pointer-events-none hidden sm:flex flex-col gap-1">
           <div className="flex items-center gap-3">
             {[["NODES","22"],["EDGES","32"],["PACKETS","32"]].map(([label, val], i) => (
               <React.Fragment key={label}>
@@ -311,8 +311,7 @@ const ScannerTab = () => {
         {prob === 0 && (
           <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
             <div className="flex flex-col items-center gap-2 opacity-20">
-              <div className="font-orbitron text-xs tracking-[0.3em] text-white">ENTER A TRANSACTION ID</div>
-              <div className="font-orbitron text-xs tracking-[0.3em] text-white">OR LIVE ETH ADDRESS</div>
+              <div className="font-orbitron text-xs tracking-[0.3em] text-white text-center px-4">ENTER A TRANSACTION ID OR LIVE ETH ADDRESS</div>
               <div className="flex flex-col items-center gap-0.5 mt-2 animate-bounce">
                 <div className="w-4 h-px bg-white/60" />
                 <div className="w-2.5 h-px bg-white/40" />
@@ -394,7 +393,7 @@ const ResearchTab = ({ stats, globalShap }) => {
 
   return (
     <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden bg-grid">
-      <div className="p-6 max-w-6xl mx-auto flex flex-col gap-6">
+      <div className="p-4 sm:p-6 max-w-6xl mx-auto flex flex-col gap-6">
 
         {/* Title */}
         <div className="border-b border-border pb-3">
@@ -404,7 +403,7 @@ const ResearchTab = ({ stats, globalShap }) => {
         </div>
 
         {/* KPI Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
           <KpiCard label="Accuracy"       value={`${accuracy}%`}           accent="green" />
           <KpiCard label="ROC-AUC"        value={rocVal}                    accent="green" />
           {precision && <KpiCard label="Precision"    value={`${precision}%`}  accent="green" />}
@@ -420,11 +419,11 @@ const ResearchTab = ({ stats, globalShap }) => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
 
           {/* Confusion Matrix */}
-          <div className="bg-panel border border-border rounded p-5">
+          <div className="bg-panel border border-border rounded p-4 sm:p-5 overflow-x-auto">
             <h3 className="font-orbitron text-muted text-xs tracking-widest uppercase mb-4">
               Confusion Matrix
             </h3>
-            <div className="grid gap-1.5" style={{ gridTemplateColumns: 'auto 1fr 1fr' }}>
+            <div className="grid gap-1.5 min-w-[300px]" style={{ gridTemplateColumns: 'auto 1fr 1fr' }}>
               {/* Headers */}
               <div />
               <div className="text-center text-xs text-muted font-mono-sec py-1.5 bg-white/[0.03] rounded">Pred: LEGIT</div>
@@ -453,7 +452,7 @@ const ResearchTab = ({ stats, globalShap }) => {
           </div>
 
           {/* ROC Curve */}
-          <div className="bg-panel border border-border rounded p-5">
+          <div className="bg-panel border border-border rounded p-4 sm:p-5">
             <h3 className="font-orbitron text-muted text-xs tracking-widest uppercase mb-4">ROC Curve</h3>
             <div className="relative h-52 w-full">
               <Line data={rocData} options={rocOptions} />
@@ -464,7 +463,7 @@ const ResearchTab = ({ stats, globalShap }) => {
 
         {/* Global SHAP */}
         {globalShapData && (
-          <div className="bg-panel border border-border rounded p-5">
+          <div className="bg-panel border border-border rounded p-4 sm:p-5">
             <h3 className="font-orbitron text-muted text-xs tracking-widest uppercase mb-4">
               Global Feature Importance (SHAP)
             </h3>
@@ -475,15 +474,15 @@ const ResearchTab = ({ stats, globalShap }) => {
         )}
 
         {/* Project Details */}
-        <div className="bg-panel border border-border rounded p-5">
+        <div className="bg-panel border border-border rounded p-4 sm:p-5">
           <h3 className="font-orbitron text-muted text-xs tracking-widest uppercase mb-5">Project Details</h3>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             <div>
               <div className="font-orbitron text-green text-xs mb-3 tracking-wide">Submitted By</div>
               <ul className="text-sm text-gray-300 space-y-2 font-mono-sec">
-                <li><span className="text-white font-bold">Nafiz Tonmoy</span> <span className="text-muted text-xs">20220104136</span></li>
-                <li><span className="text-white font-bold">Jamil Jim</span> <span className="text-muted text-xs">20220104139</span></li>
-                <li><span className="text-white font-bold">Md Nahid Hossain</span> <span className="text-muted text-xs">20220104146</span></li>
+                <li><span className="text-white font-bold">Nafiz Tonmoy</span> <span className="text-muted text-xs block sm:inline">20220104136</span></li>
+                <li><span className="text-white font-bold">Jamil Jim</span> <span className="text-muted text-xs block sm:inline">20220104139</span></li>
+                <li><span className="text-white font-bold">Md Nahid Hossain</span> <span className="text-muted text-xs block sm:inline">20220104146</span></li>
               </ul>
               <div className="text-muted text-xs mt-3 font-mono-sec">Lab Group: C2</div>
             </div>
@@ -503,8 +502,8 @@ const ResearchTab = ({ stats, globalShap }) => {
             <div className="sm:text-right">
               <div className="font-orbitron text-green text-xs mb-3 tracking-wide">Institution</div>
               <div className="text-muted text-xs leading-relaxed font-mono-sec">
-                Department of Computer Science<br />and Engineering<br />
-                <span className="text-gray-400">Ahsanullah University of<br />Science and Technology</span>
+                Department of Computer Science<br className="hidden sm:block" />and Engineering<br />
+                <span className="text-gray-400">Ahsanullah University of<br className="hidden sm:block" />Science and Technology</span>
               </div>
             </div>
           </div>
@@ -540,19 +539,19 @@ const Dashboard = () => {
     <div className="flex flex-col h-screen w-screen overflow-hidden bg-bg text-white font-mono-sec">
 
       {/* NAVBAR */}
-      <nav className="flex-shrink-0 flex items-center justify-between px-6 py-3 bg-panel border-b border-border z-20">
+      <nav className="flex-shrink-0 flex flex-wrap items-center justify-between px-4 sm:px-6 py-3 gap-3 bg-panel border-b border-border z-20">
         <div className="font-orbitron font-black text-lg tracking-widest">
           SECURE<span className="text-green glow-green">ETHER</span>
         </div>
 
         {/* Tab buttons */}
-        <div className="flex gap-1">
+        <div className="flex gap-1 order-3 w-full sm:w-auto sm:order-none justify-center">
           {tabs.map(tab => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={`
-                font-orbitron text-xs tracking-widest px-5 py-2 rounded transition-all duration-200
+                font-orbitron text-xs tracking-widest px-5 py-2 rounded transition-all duration-200 flex-1 sm:flex-none
                 ${activeTab === tab.id
                   ? "bg-green text-black font-bold shadow-glow-green"
                   : "text-muted border border-border hover:text-green hover:border-green/50"
@@ -565,7 +564,7 @@ const Dashboard = () => {
         </div>
 
         {/* Live status dot */}
-        <div className="flex items-center gap-2 text-xs text-muted font-mono-sec">
+        <div className="flex items-center gap-2 text-xs text-muted font-mono-sec order-2 sm:order-none">
           <span className="w-1.5 h-1.5 rounded-full bg-green animate-pulse inline-block" />
           LIVE
         </div>
