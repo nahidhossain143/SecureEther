@@ -12,7 +12,7 @@ ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, BarEleme
 
 const API_URL = process.env.REACT_APP_API_URL || "http://localhost:8000";
 
-// ── FEATURE DICTIONARY ────────────────────────────────────────────────────────
+// FEATURE DICTIONARY 
 const FEATURE_DICTIONARY = {
   "time diff between first and last (mins)": "the account's active lifespan",
   "avg min between sent tnx":               "the speed of outgoing transactions",
@@ -49,7 +49,7 @@ const getAIReasoning = (res) => {
     : `Primary factor was ${feat} (value: ${val}), which ${dir} and falls within normal ranges for legitimate users.`;
 };
 
-// ── REUSABLE COMPONENTS ───────────────────────────────────────────────────────
+// REUSABLE COMPONENTS 
 
 const KpiCard = ({ label, value, sub, accent = "green" }) => {
   const accentClasses = {
@@ -70,26 +70,33 @@ const SectionLabel = ({ children }) => (
   <div className="font-orbitron text-xs tracking-widest text-muted uppercase mb-1">{children}</div>
 );
 
-// ── SCANNER TAB ───────────────────────────────────────────────────────────────
+// SCANNER TAB 
 
 const ScannerTab = () => {
   const [loading,  setLoading]  = useState(false);
-  const [txnId,    setTxnId]    = useState("");
+  const [searchInput, setSearchInput] = useState("");
   const [result,   setResult]   = useState(null);
   const [error,    setError]    = useState(null);
 
   const handlePredict = useCallback(async () => {
-    if (!txnId) return;
-    setLoading(true); setResult(null); setError(null);
+    if (!searchInput) return;
+    setLoading(true); 
+    setResult(null); 
+    setError(null);
+    
     try {
-      const res = await axios.get(`${API_URL}/predict/${txnId}`);
-      setResult(res.data);
+      const query = searchInput.trim();
+      const isLive = query.startsWith("0x");
+      const endpoint = isLive ? `/predict-live/${query}` : `/predict/${query}`;
+      
+      const res = await axios.get(`${API_URL}${endpoint}`);
+      setResult({ ...res.data, isLive }); 
     } catch (err) {
-      setError(err.response?.data?.detail || "Backend offline or transaction not found.");
+      setError(err.response?.data?.detail || "Backend offline or address not found.");
     } finally {
       setLoading(false);
     }
-  }, [txnId]);
+  }, [searchInput]);
 
   const handleKeyDown = (e) => { if (e.key === 'Enter') handlePredict(); };
 
@@ -101,7 +108,7 @@ const ScannerTab = () => {
   return (
     <div className="flex flex-1 overflow-hidden min-h-0">
 
-      {/* ── SIDEBAR ── */}
+      {/* SIDEBAR */}
       <div className="w-80 min-w-[320px] flex flex-col bg-panel border-r border-border overflow-y-auto flex-shrink-0">
 
         {/* Header */}
@@ -110,18 +117,17 @@ const ScannerTab = () => {
             Transaction Checker
           </div>
           <p className="text-muted text-xs leading-relaxed">
-            Enter a transaction ID (0 – 9840) to scan the Ethereum dataset for fraud signals.
+            Enter a Dataset ID (0-9840) or paste a live Ethereum wallet address (0x...)
           </p>
         </div>
 
         {/* Input */}
         <div className="px-6 py-5 flex flex-col gap-3 border-b border-border">
           <input
-            type="number"
-            min="0"
-            placeholder="Transaction ID  e.g. 500"
-            value={txnId}
-            onChange={(e) => setTxnId(e.target.value)}
+            type="text"
+            placeholder="Txn ID or ETH Address..."
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
             onKeyDown={handleKeyDown}
             className="
               w-full bg-bg border border-border rounded px-4 py-3
@@ -133,7 +139,7 @@ const ScannerTab = () => {
           />
           <button
             onClick={handlePredict}
-            disabled={loading || !txnId}
+            disabled={loading || !searchInput}
             className="
               w-full py-3 rounded font-orbitron font-bold text-xs tracking-widest uppercase
               bg-gradient-to-r from-green to-emerald-500 text-black
@@ -142,7 +148,7 @@ const ScannerTab = () => {
               transition-all duration-200
             "
           >
-            {loading ? "PROCESSING…" : "SCAN CHAIN"}
+            {loading ? "PROCESSING..." : "SCAN CHAIN"}
           </button>
         </div>
 
@@ -163,18 +169,26 @@ const ScannerTab = () => {
               <div className={`font-orbitron font-black text-2xl mt-1 ${isFraud ? "text-red glow-red animate-pulse" : "text-green glow-green"}`}>
                 {isFraud ? "FRAUD DETECTED" : "LEGITIMATE"}
               </div>
-              {result.actual_label != null && (() => {
-                const correct = (result.actual_label === 1) === isFraud;
-                return (
-                  <span className={`inline-block mt-2 px-2 py-0.5 rounded text-xs font-orbitron border ${
-                    correct
-                      ? "text-green border-green/30 bg-green/5"
-                      : "text-red border-red/30 bg-red/5"
-                  }`}>
-                    {correct ? "✓ CORRECT" : "✗ MISMATCH"} · Actual: {result.actual_label === 1 ? "FRAUD" : "LEGIT"}
-                  </span>
-                );
-              })()}
+              
+              {/* Dynamic Tag based on Live or CSV fetch */}
+              {result.isLive ? (
+                <span className="inline-block mt-2 px-2 py-0.5 rounded text-xs font-orbitron border text-blue-400 border-blue-400/30 bg-blue-400/5">
+                  LIVE FETCH: {result.transactions_analyzed} txns analyzed
+                </span>
+              ) : (
+                result.actual_label != null && (() => {
+                  const correct = (result.actual_label === 1) === isFraud;
+                  return (
+                    <span className={`inline-block mt-2 px-2 py-0.5 rounded text-xs font-orbitron border ${
+                      correct
+                        ? "text-green border-green/30 bg-green/5"
+                        : "text-red border-red/30 bg-red/5"
+                    }`}>
+                      {correct ? "✓ CORRECT" : "✗ MISMATCH"} · Actual: {result.actual_label === 1 ? "FRAUD" : "LEGIT"}
+                    </span>
+                  );
+                })()
+              )}
             </div>
 
             {/* Risk score */}
@@ -221,7 +235,7 @@ const ScannerTab = () => {
         )}
       </div>
 
-      {/* ── 3D VISUALIZER ── */}
+      {/* 3D VISUALIZER */}
       <div className="flex-1 min-w-0 relative bg-gradient-to-br from-[#050f05] to-black scanlines overflow-hidden">
 
         {/* Fraud border pulse */}
@@ -298,7 +312,7 @@ const ScannerTab = () => {
           <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
             <div className="flex flex-col items-center gap-2 opacity-20">
               <div className="font-orbitron text-xs tracking-[0.3em] text-white">ENTER A TRANSACTION ID</div>
-              <div className="font-orbitron text-xs tracking-[0.3em] text-white">TO SCAN THE NETWORK</div>
+              <div className="font-orbitron text-xs tracking-[0.3em] text-white">OR LIVE ETH ADDRESS</div>
               <div className="flex flex-col items-center gap-0.5 mt-2 animate-bounce">
                 <div className="w-4 h-px bg-white/60" />
                 <div className="w-2.5 h-px bg-white/40" />
@@ -316,12 +330,12 @@ const ScannerTab = () => {
   );
 };
 
-// ── RESEARCH TAB ──────────────────────────────────────────────────────────────
+// RESEARCH TAB 
 
 const ResearchTab = ({ stats, globalShap }) => {
   if (!stats) return (
     <div className="flex-1 flex items-center justify-center text-muted font-orbitron text-sm tracking-widest">
-      LOADING METRICS… <span className="text-dim ml-2 text-xs">(is the backend running?)</span>
+      LOADING METRICS... <span className="text-dim ml-2 text-xs">(is the backend running?)</span>
     </div>
   );
 
@@ -357,7 +371,7 @@ const ResearchTab = ({ stats, globalShap }) => {
   };
 
   const globalShapData = globalShap ? {
-    labels: globalShap.slice(0, 10).map(d => d.feature.length > 28 ? d.feature.slice(0, 28) + '…' : d.feature),
+    labels: globalShap.slice(0, 10).map(d => d.feature.length > 28 ? d.feature.slice(0, 28) + '...' : d.feature),
     datasets: [{
       label: 'Mean |SHAP|',
       data:  globalShap.slice(0, 10).map(d => d.mean_abs_shap),
@@ -398,7 +412,7 @@ const ResearchTab = ({ stats, globalShap }) => {
           {f1        && <KpiCard label="F1-Score"     value={`${f1}%`}         accent="green" />}
           <KpiCard label="Train Time"     value={`${trainTime}s`}           accent="red"   />
           {nOrig && nPca && (
-            <KpiCard label="PCA Features" value={`${nOrig}→${nPca}`} sub="features → components" accent="blue" />
+            <KpiCard label="PCA Features" value={`${nOrig} -> ${nPca}`} sub="features -> components" accent="blue" />
           )}
         </div>
 
@@ -501,7 +515,7 @@ const ResearchTab = ({ stats, globalShap }) => {
   );
 };
 
-// ── MAIN DASHBOARD ────────────────────────────────────────────────────────────
+// MAIN DASHBOARD 
 
 const Dashboard = () => {
   const [activeTab,  setActiveTab]  = useState("scanner");
@@ -525,7 +539,7 @@ const Dashboard = () => {
   return (
     <div className="flex flex-col h-screen w-screen overflow-hidden bg-bg text-white font-mono-sec">
 
-      {/* ── NAVBAR ── */}
+      {/* NAVBAR */}
       <nav className="flex-shrink-0 flex items-center justify-between px-6 py-3 bg-panel border-b border-border z-20">
         <div className="font-orbitron font-black text-lg tracking-widest">
           SECURE<span className="text-green glow-green">ETHER</span>
@@ -557,7 +571,7 @@ const Dashboard = () => {
         </div>
       </nav>
 
-      {/* ── CONTENT ── */}
+      {/* CONTENT */}
       <div className="flex flex-1 min-h-0 overflow-hidden">
         {activeTab === "scanner"
           ? <ScannerTab />
